@@ -48,7 +48,7 @@ export default function Login() {
 
       localStorage.setItem("token", token);
       localStorage.setItem("role", user.role);
-      localStorage.setItem("userId", user._id);
+      localStorage.setItem("userId", user._id || user.id);
       localStorage.setItem("name", user.name);
 
       /* ================= REDIRECT BY ROLE ================= */

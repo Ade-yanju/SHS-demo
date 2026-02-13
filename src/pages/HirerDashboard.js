@@ -13,6 +13,7 @@ export default function HirerDashboard() {
   const [jobs, setJobs] = useState([]);
   const [quotes, setQuotes] = useState([]);
   const [activeJob, setActiveJob] = useState(null);
+  const [selectedChatUser, setSelectedChatUser] = useState(null);
 
   const [loadingJobs, setLoadingJobs] = useState(true);
   const [loadingQuotes, setLoadingQuotes] = useState(false);
@@ -21,34 +22,34 @@ export default function HirerDashboard() {
   /* ================= AUTH GUARD ================= */
 
   useEffect(() => {
-    if (!token) {
+    const token = localStorage.getItem("token");
+    const id = localStorage.getItem("userId");
+
+    if (!token || !id) {
       navigate("/login");
       return;
     }
 
-    if (!hirerId) {
-      navigate("/login");
-      return;
-    }
-
-    loadJobs();
+    loadJobs(id);
   }, []);
 
   /* ================= LOAD JOBS ================= */
 
-  const loadJobs = async () => {
+  const loadJobs = async (id) => {
     try {
       setLoadingJobs(true);
 
-      const res = await axios.get(`/api/requests/hirer/${hirerId}`);
+      const res = await axios.get(`/api/requests/hirer/${id}`);
 
       setJobs(res.data || []);
 
-      if (res.data?.length > 0) {
-        setActiveJob(res.data[0]);
-        loadQuotes(res.data[0]._id);
-      } else {
-        setActiveJob(null);
+      if (res.data.length > 0) {
+        const firstJob = res.data[0];
+        setActiveJob(firstJob); // 🔥 THIS WAS MISSING
+
+        if (firstJob.freelancerId?._id) {
+          setSelectedChatUser(firstJob.freelancerId._id);
+        }
       }
     } catch (err) {
       handleAuthError(err);
@@ -82,18 +83,21 @@ export default function HirerDashboard() {
     try {
       setActionLoading(true);
 
-      // mark quote accepted
       await axios.put(`/api/quotes/accept/${quote._id}`);
 
-      // assign freelancer to job
       await axios.put(`/api/requests/assign`, {
         jobId: activeJob._id,
         freelancerId: quote.freelancerId,
       });
 
-      // reload
-      await loadJobs();
-      await loadQuotes(activeJob._id);
+      const updated = await axios.get(`/api/requests/${activeJob._id}`);
+
+      setActiveJob(updated.data);
+
+      // 🔥 OPEN CHAT IMMEDIATELY
+      setSelectedChatUser(updated.data.freelancerId._id);
+
+      await loadJobs(hirerId);
     } catch (err) {
       handleAuthError(err);
     } finally {
@@ -156,6 +160,12 @@ export default function HirerDashboard() {
             onClick={() => {
               setActiveJob(job);
               loadQuotes(job._id);
+
+              if (job.freelancerId?._id) {
+                setSelectedChatUser(job.freelancerId._id);
+              } else {
+                setSelectedChatUser(null);
+              }
             }}
           >
             <strong>{job.service}</strong>
@@ -182,7 +192,11 @@ export default function HirerDashboard() {
             {!loadingQuotes && quotes.length === 0 && <p>No freelancers yet</p>}
 
             {quotes.map((q) => (
-              <motion.div key={q._id} whileHover={{ scale: 1.01 }} style={quoteCard}>
+              <motion.div
+                key={q._id}
+                style={quoteCard}
+                onClick={() => setSelectedChatUser(q.freelancerId)}
+              >
                 <div>
                   <h4>£{q.price}</h4>
                   <p>{q.message}</p>
@@ -200,16 +214,48 @@ export default function HirerDashboard() {
                 )}
               </motion.div>
             ))}
+            {/* HIRED FREELANCER PANEL */}
+            {activeJob?.freelancerId && (
+              <div
+                style={{
+                  background: "#EEF2FF",
+                  padding: "15px",
+                  borderRadius: "12px",
+                  marginTop: "15px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div>
+                  <strong>Freelancer Assigned:</strong>
+                  <div>{activeJob.freelancerId.name}</div>
+                </div>
+
+                <button
+                  style={{
+                    background: "#4F46E5",
+                    color: "#fff",
+                    padding: "10px 14px",
+                    borderRadius: "8px",
+                    border: "none",
+                  }}
+  onClick={() => {
+  if (activeJob?.freelancerId?._id) {
+    setSelectedChatUser(activeJob.freelancerId._id);
+  }
+}}
+                >
+                  Message Freelancer
+                </button>
+              </div>
+            )}
 
             {/* CHAT */}
-            {activeJob.freelancerId && (
+            {activeJob && selectedChatUser && (
               <>
-                <h3 style={sectionTitle}>Project Chat</h3>
-
-                <ChatBox
-                  jobId={activeJob._id}
-                  receiverId={activeJob.freelancerId}
-                />
+                <h3 style={sectionTitle}>Project Conversation</h3>
+                <ChatBox jobId={activeJob._id} receiverId={selectedChatUser} />
               </>
             )}
           </>
@@ -250,7 +296,6 @@ export default function HirerDashboard() {
     </div>
   );
 }
-
 
 /* ================= STYLES ================= */
 

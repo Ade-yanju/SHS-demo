@@ -47,7 +47,7 @@ export default function QuoteModal({ job, close }) {
       setError("");
 
       await axios.post("/api/quotes", {
-        jobId: job.id,
+        jobId: job._id,
         price,
         message,
       });

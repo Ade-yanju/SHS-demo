@@ -10,56 +10,91 @@ export default function ChatBox({ jobId, receiverId }) {
 
   const senderId = localStorage.getItem("userId");
 
+  const roomId = `${jobId}_${receiverId}`;
+
+  /* JOIN PRIVATE ROOM */
   useEffect(() => {
-    socket.emit("joinRoom", jobId);
+    if (!jobId || !receiverId || !senderId) return;
 
-    fetchMessages();
+    socket.emit("joinRoom", { roomId });
 
-    socket.on("receiveMessage", (msg) => {
+    loadMessages();
+
+    const handleMessage = (msg) => {
       setMessages((prev) => [...prev, msg]);
-    });
+    };
 
-    return () => socket.off("receiveMessage");
-  }, [jobId]);
+    socket.on("receiveMessage", handleMessage);
 
-  const fetchMessages = async () => {
-    const res = await axios.get(`http://localhost:5000/api/messages/${jobId}`);
+    return () => socket.off("receiveMessage", handleMessage);
+  }, [jobId, receiverId]);
+
+  /* LOAD CHAT HISTORY */
+  const loadMessages = async () => {
+    const res = await axios.get(
+      `http://localhost:5000/api/messages/${jobId}/${receiverId}`,
+    );
     setMessages(res.data);
   };
 
+  /* SEND MESSAGE */
   const sendMessage = () => {
-    const messageData = {
+    if (!text.trim()) return;
+
+    socket.emit("sendMessage", {
+      roomId,
       jobId,
       senderId,
       receiverId,
       text,
-    };
+    });
 
-    socket.emit("sendMessage", messageData);
     setText("");
   };
 
   return (
-    <div style={chatWrapper}>
-      <div style={messagesBox}>
-        {messages.map((msg, i) => (
-          <div key={i} style={msg.senderId === senderId ? myMsg : otherMsg}>
+    <div style={{ marginTop: 20 }}>
+      <div
+        style={{
+          height: 300,
+          overflowY: "auto",
+          background: "#fff",
+          padding: 12,
+        }}
+      >
+        {messages.map((msg) => (
+          <div
+            key={msg._id}
+            style={
+              msg.senderId === senderId
+                ? {
+                    background: "#0B5ED7",
+                    color: "#fff",
+                    padding: 8,
+                    marginBottom: 6,
+                    borderRadius: 6,
+                  }
+                : {
+                    background: "#F3F4F6",
+                    padding: 8,
+                    marginBottom: 6,
+                    borderRadius: 6,
+                  }
+            }
+          >
             {msg.text}
           </div>
         ))}
       </div>
 
-      <div style={inputArea}>
+      <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}
+          style={{ flex: 1, padding: 10 }}
           placeholder="Type message..."
-          style={chatInput}
         />
-
-        <button onClick={sendMessage} style={sendBtn}>
-          Send
-        </button>
+        <button onClick={sendMessage}>Send</button>
       </div>
     </div>
   );

@@ -21,7 +21,7 @@ export default function Dashboard() {
       setLoading(true);
 
       const [jobRes, quoteRes] = await Promise.all([
-        axios.get("/api/requests"),
+        axios.get("/api/requests/freelancer/my-jobs"),
         axios.get(`/api/quotes/freelancer/${freelancerId}`),
       ]);
 

@@ -40,7 +40,7 @@ export default function Marketplace() {
       const res = await axios.get("/api/requests"); // token auto attached
 
       const mapped = res.data.map((job) => ({
-        id: job._id,
+        _id: job._id,
         title: job.service,
         client: job.userId?.name || job.name,
         location: job.location,
@@ -120,7 +120,7 @@ export default function Marketplace() {
 
         <div style={jobGrid}>
           {filteredJobs.map((job) => (
-            <motion.div key={job.id} whileHover={{ y: -4 }} style={jobCard}>
+            <motion.div key={job._id} whileHover={{ y: -4 }} style={jobCard}>
               <div>
                 <h3 style={jobTitle}>{job.title}</h3>
 
