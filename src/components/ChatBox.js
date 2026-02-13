@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import axios from "axios";
 
-const socket = io("http://localhost:5000");
+const socket = io("https://shs-demo-backend.onrender.com");
 
 export default function ChatBox({ jobId, receiverId }) {
   const [messages, setMessages] = useState([]);
@@ -32,7 +32,7 @@ export default function ChatBox({ jobId, receiverId }) {
   /* LOAD CHAT HISTORY */
   const loadMessages = async () => {
     const res = await axios.get(
-      `http://localhost:5000/api/messages/${jobId}/${receiverId}`,
+      `https://shs-demo-backend.onrender.com/api/messages/${jobId}/${receiverId}`,
     );
     setMessages(res.data);
   };

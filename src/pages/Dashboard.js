@@ -165,50 +165,50 @@ const mainPanel = {
   padding: "30px",
 };
 
-const progressSection = {
-  marginTop: "20px",
-};
+// const progressSection = {
+//   marginTop: "20px",
+// };
 
-const progressBar = {
-  height: "8px",
-  background: "#E5E7EB",
-  borderRadius: "6px",
-  overflow: "hidden",
-};
+// const progressBar = {
+//   height: "8px",
+//   background: "#E5E7EB",
+//   borderRadius: "6px",
+//   overflow: "hidden",
+// };
 
-const progressFill = {
-  height: "100%",
-  background: "#0B5ED7",
-};
+// const progressFill = {
+//   height: "100%",
+//   background: "#0B5ED7",
+// };
 
-const chatBox = {
-  marginTop: "30px",
-  background: "#fff",
-  padding: "20px",
-  borderRadius: "12px",
-};
+// const chatBox = {
+//   marginTop: "30px",
+//   background: "#fff",
+//   padding: "20px",
+//   borderRadius: "12px",
+// };
 
-const message = {
-  background: "#F3F4F6",
-  padding: "10px",
-  borderRadius: "8px",
-  marginBottom: "10px",
-};
+// const message = {
+//   background: "#F3F4F6",
+//   padding: "10px",
+//   borderRadius: "8px",
+//   marginBottom: "10px",
+// };
 
-const messageAlt = {
-  background: "#0B5ED7",
-  color: "#fff",
-  padding: "10px",
-  borderRadius: "8px",
-  marginBottom: "10px",
-};
+// const messageAlt = {
+//   background: "#0B5ED7",
+//   color: "#fff",
+//   padding: "10px",
+//   borderRadius: "8px",
+//   marginBottom: "10px",
+// };
 
-const chatInput = {
-  width: "100%",
-  padding: "12px",
-  borderRadius: "8px",
-  border: "1px solid #ddd",
-};
+// const chatInput = {
+//   width: "100%",
+//   padding: "12px",
+//   borderRadius: "8px",
+//   border: "1px solid #ddd",
+// };
 
 /* RIGHT */
 const rightPanel = {
@@ -247,27 +247,27 @@ const availableBtn = {
   cursor: "pointer",
 };
 
-const payBtn = {
-  marginTop: "10px",
-  background: "#0B5ED7",
-  color: "#fff",
-  padding: "10px 16px",
-  border: "none",
-  borderRadius: "8px",
-};
+// const payBtn = {
+//   marginTop: "10px",
+//   background: "#0B5ED7",
+//   color: "#fff",
+//   padding: "10px 16px",
+//   border: "none",
+//   borderRadius: "8px",
+// };
 
-const callBtn = {
-  marginTop: "10px",
-  width: "100%",
-  padding: "10px",
-  border: "none",
-  borderRadius: "8px",
-};
+// const callBtn = {
+//   marginTop: "10px",
+//   width: "100%",
+//   padding: "10px",
+//   border: "none",
+//   borderRadius: "8px",
+// };
 
-const emailBtn = {
-  marginTop: "10px",
-  width: "100%",
-  padding: "10px",
-  border: "none",
-  borderRadius: "8px",
-};
+// const emailBtn = {
+//   marginTop: "10px",
+//   width: "100%",
+//   padding: "10px",
+//   border: "none",
+//   borderRadius: "8px",
+// };

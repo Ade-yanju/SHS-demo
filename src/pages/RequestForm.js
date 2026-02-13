@@ -14,7 +14,10 @@ export default function RequestForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const submit = async () => {
-    await axios.post("http://localhost:5000/api/requests", form);
+    await axios.post(
+      "https://shs-demo-backend.onrender.com/api/requests",
+      form,
+    );
     alert("Request submitted successfully");
   };
 
@@ -22,16 +25,30 @@ export default function RequestForm() {
     <div style={{ padding: "30px" }}>
       <h2>Request a Service</h2>
 
-      <input name="name" placeholder="Name" onChange={handleChange} /><br /><br />
-      <input name="location" placeholder="Location" onChange={handleChange} /><br /><br />
-      <input name="service" placeholder="Service Needed" onChange={handleChange} /><br /><br />
-      <input name="contact" placeholder="Contact" onChange={handleChange} /><br /><br />
+      <input name="name" placeholder="Name" onChange={handleChange} />
+      <br />
+      <br />
+      <input name="location" placeholder="Location" onChange={handleChange} />
+      <br />
+      <br />
+      <input
+        name="service"
+        placeholder="Service Needed"
+        onChange={handleChange}
+      />
+      <br />
+      <br />
+      <input name="contact" placeholder="Contact" onChange={handleChange} />
+      <br />
+      <br />
 
       <textarea
         name="description"
         placeholder="Describe your issue"
         onChange={handleChange}
-      ></textarea><br /><br />
+      ></textarea>
+      <br />
+      <br />
 
       <button onClick={submit}>Submit Request</button>
     </div>

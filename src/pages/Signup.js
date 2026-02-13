@@ -33,8 +33,8 @@ export default function Signup() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/signup",
-        form
+        "https://shs-demo-backend.onrender.com/api/auth/signup",
+        form,
       );
 
       setLoading(false);
@@ -53,9 +53,7 @@ export default function Signup() {
         style={card}
       >
         <h1>Create Account</h1>
-        <p style={subtitle}>
-          Join the construction marketplace platform.
-        </p>
+        <p style={subtitle}>Join the construction marketplace platform.</p>
 
         {message && <div style={alert}>{message}</div>}
 
@@ -85,11 +83,7 @@ export default function Signup() {
         <div style={{ marginTop: "10px" }}>
           <label>Select Role</label>
 
-          <select
-            name="role"
-            style={select}
-            onChange={handleChange}
-          >
+          <select name="role" style={select} onChange={handleChange}>
             <option value="hirer">I want to hire workers</option>
             <option value="freelancer">I am a skilled freelancer</option>
           </select>
@@ -108,9 +102,7 @@ export default function Signup() {
           {loading ? "Creating account..." : "Create Account"}
         </motion.button>
 
-        <p style={loginLink}>
-          Already have an account? Login
-        </p>
+        <p style={loginLink}>Already have an account? Login</p>
       </motion.div>
     </div>
   );

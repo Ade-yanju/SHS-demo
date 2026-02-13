@@ -8,7 +8,7 @@ export default function HirerDashboard() {
   const navigate = useNavigate();
 
   const hirerId = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
+  //const token = localStorage.getItem("token");
 
   const [jobs, setJobs] = useState([]);
   const [quotes, setQuotes] = useState([]);
@@ -21,17 +21,20 @@ export default function HirerDashboard() {
 
   /* ================= AUTH GUARD ================= */
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const id = localStorage.getItem("userId");
+useEffect(() => {
+  if (typeof window === "undefined") return;
 
-    if (!token || !id) {
-      navigate("/login");
-      return;
-    }
+  const token = localStorage.getItem("token");
+  const id = localStorage.getItem("userId");
 
-    loadJobs(id);
-  }, []);
+  if (!token || !id) {
+    navigate("/login");
+    return;
+  }
+
+  loadJobs(id);
+}, [navigate]);
+
 
   /* ================= LOAD JOBS ================= */
 
